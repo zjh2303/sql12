@@ -1,0 +1,80 @@
+信息系统与数据库技术练习12答题卡
+
+班级：  19信管2班   
+姓名：     张佳楠
+学号：     20190307230
+
+注：请将答案放置在序号下方。*/
+
+（一）
+/*1、打开PROJECT数据库。*/
+USE PROJECT
+GO
+/*2、创建视图V_EP，在Employee、EP、Project表查询雇员号(Eid)、姓名(Ename)、项目号(Pid)、项目名(Pname)和报酬(Wages)。*/
+CREATE VIEW V_EP
+AS
+SELECT Employee.Eid, Ename,Project.Pid,Pname,Wages
+FROM Employee JOIN EP JOIN Project
+ON EP.Pid=Project.Pid
+ON Employee.Eid=Project.Pid
+GO
+/*3、查询视图V_EP全部字段*/
+
+/*4、查询视图V_EP“1#”、“3#”、“5#”(Pname为这三个项目)的雇员号(Eid)、姓名(Ename)、项目名(Pname)、报酬(Wages)*/
+SELECT Eid,Ename,Pname,Wages
+FROM V_EP
+WHERE Pname IN('1#','3#','5#')
+GO
+/*5、创建视图V_Pay，查询Employee表雇员号(Eid)、姓名(Ename)、性别(Esex)、总工资 (BasePay+Bonus)和实际工资 (总工资-Insurance)，总工资别名为TotalPay，实际工资别名为RealPay。*/
+CREATE VIEW V_Pay
+AS
+SELECT*,
+FROM Employee
+GO
+/*6、查询视图V_Pay全部字段*/
+SELECT V_Pay
+FROM V_Pay
+GO
+/*7、创建视图v_emp，功能是查询Department表的部门名(Dname)和Employee的全部字段。*/
+CREATE VIEW v_emp
+AS
+SELECT Department.Dname,Employee.*
+FROM Department JOIN Employee
+ON Department.Did=Employee.Did
+GO
+/*8、查询视图v_emp财务部员工(部门名Dname为财务部)的全部字段。*/
+SELECT*
+FROM v_emp
+WHERE Dname='财务部'
+GO
+/*9、查看视图v_emp的参照关系信息。*/
+EXEC Sp_depends v_emp
+GO
+/*10、查看视图v_emp的定义文本*/
+EXEC Sp_helptext v_emp
+GO
+/*11、修改视图V_emp，视图内的查询语句不进行任何修改（与第7题相同），但启用加密。*/
+ALTER VIEW V_emp
+WITH ENCRYPTION
+AS
+SELECT Department.Dname,Employee.*
+FROM Department JOIN Employee
+ON Department.Did=Employee.Did
+GO
+/*12、查看视图v_emp的定义文本*/
+EXEC Sp_Helptext v_emp
+GO
+/*13、删除视图v_emp*/
+DROP VIEW V_emp
+GO
+/*14、查询Department表院系名(Dname)为财务部的院系号(Did)、院系名(Dname)及Project表中项目名(Pname)包含2的全部字段*/
+SELECT Did,Dname,Project.*
+FROM Department CROSS JOIN Project
+WHERE Dname= '财务部'AND Pname LIKE'%2%'
+GO
+/*15、查询在Employee中部门号(Did)和陈燕玲(Ename为陈燕玲)相同的雇员数据，要求显示全部字段。*/
+SELECT B.*
+FROM Employee A JOIN Employee B
+ON A.Did=B.Did
+WHERE A.Ename='陈燕玲'
+GO
